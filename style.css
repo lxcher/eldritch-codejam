@@ -16,6 +16,8 @@ body {
   width: 40%;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 .ancients__ancient {
   margin: 15px;
@@ -55,9 +57,13 @@ body {
   font-weight: 800;
   border: 2px solid purple;
   color: purple;
+  cursor: pointer;
 }
 .button_shuffle {
   width: 200px;
+}
+.button:hover {
+  background-color: red;
 }
 
 .deck-container {
@@ -111,6 +117,48 @@ body {
   width: 150px;
   background: url("./assets/mythicCardBackground.png") center no-repeat;
   background-size: contain;
+}
+
+@media (max-width: 1090px) {
+  .ancients {
+    width: 50%;
+  }
+  .difficulties {
+    width: 20%;
+  }
+  .deck-container {
+    width: 30%;
+  }
+}
+
+@media (max-width: 880px) {
+  .ancients__ancient {
+    width: 160px;
+  }
+}
+
+@media(max-width: 780px) {
+  .container {
+    flex-direction: column;
+  }
+  .ancients {
+    width: 100%;
+    flex-direction: row;
+  }
+  .difficulties {
+    width: 80%;
+    flex-direction: row;
+    margin: 0 auto;
+  }
+  .deck-container {
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .tracker {
+    width: 20%;
+    margin-right: 40px;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */
