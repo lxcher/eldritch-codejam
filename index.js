@@ -5,23 +5,80 @@ import greenCardsData from "./data/mythicCards/green/index.js";
 
 const shuffleCardsBtn = document.querySelector('.button_shuffle')
 
-let blueCards = new Set;
-let brownCards = new Set;
-let greenCards = new Set;
+let blueCards = []
+let brownCards = []
+let greenCards = []
 
 
-shuffleCardsBtn.addEventListener('click', shuffleCards)
+shuffleCardsBtn.addEventListener('click', () => {
+    shuffleCards()
+    setStages()
+    shuffleStages()
+})
 
 function shuffleCards() {
-    setCards(3, blueCards, blueCardsData)
-    setCards(2, brownCards, brownCardsData)
-    setCards(3, greenCards, greenCardsData)
+    setCards(2, blueCards, blueCardsData)
+    setCards(9, brownCards, brownCardsData)
+    setCards(5, greenCards, greenCardsData)
 }
 
 function setCards(quantity, deck, source) {
-    while (deck.size < quantity) {
+    let set = new Set
+    while (set.size < quantity) {
         let index = Math.floor(Math.random() * source.length)
-        deck.add(source[index])
+        set.add(source[index])
     }
-    console.log(deck)
+    for (let item of set) {
+        deck.push(item)
+    }
+}
+
+let stageOne = []
+let stageTwo = []
+let stageThree = []
+
+
+function setStages() {
+    setStage(stageOne, 1, greenCards)
+    setStage(stageOne, 2, brownCards)
+    setStage(stageOne, 1, blueCards)
+    setStage(stageTwo, 2, greenCards)
+    setStage(stageTwo, 3, brownCards)
+    setStage(stageTwo, 1, blueCards)
+    setStage(stageThree, 2, greenCards)
+    setStage(stageThree, 4, brownCards)
+    setStage(stageThree, 0, blueCards)
+
+    // console.log(stageOne)
+    // console.log(stageTwo)
+    // console.log(stageThree)
+}
+
+function setStage(stage, quantity, source) {
+    for (let i = 0; i < quantity; i++) {
+        let item = source.shift()
+        stage.push(item)
+        
+    }
+}
+
+let result = []
+
+function shuffleStage(stage) {
+    let set = new Set
+    while (set.size !== stage.length) {
+        let index = Math.floor(Math.random() * stage.length)
+        set.add(stage[index])
+    }
+    for (let item of set) {
+        result.push(item)
+    }
+}
+
+function shuffleStages() {
+    result = []
+    shuffleStage(stageOne)
+    shuffleStage(stageTwo)
+    shuffleStage(stageThree)
+    console.log(result)
 }
