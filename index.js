@@ -2,8 +2,22 @@ import blueCardsData from "./data/mythicCards/blue/index.js";
 import brownCardsData from "./data/mythicCards/brown/index.js";
 import greenCardsData from "./data/mythicCards/green/index.js";
 
-
 const shuffleCardsBtn = document.querySelector('.button_shuffle')
+const deck = document.querySelector('.deck')
+
+let index = 0
+
+deck.addEventListener('click', () => {
+    let step = 1
+    if (result.length !== 0) {
+        deck.style.backgroundImage = `url(${result[index].cardFace})`
+        index < result.length
+            ? step = 1
+            : step = 0
+        index += step
+    }
+    
+})
 
 let blueCards = []
 let brownCards = []
@@ -48,10 +62,6 @@ function setStages() {
     setStage(stageThree, 2, greenCards)
     setStage(stageThree, 4, brownCards)
     setStage(stageThree, 0, blueCards)
-
-    // console.log(stageOne)
-    // console.log(stageTwo)
-    // console.log(stageThree)
 }
 
 function setStage(stage, quantity, source) {
@@ -82,3 +92,4 @@ function shuffleStages() {
     shuffleStage(stageThree)
     console.log(result)
 }
+
