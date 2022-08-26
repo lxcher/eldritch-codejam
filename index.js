@@ -4,10 +4,57 @@ import greenCardsData from "./data/mythicCards/green/index.js";
 
 const shuffleCardsBtn = document.querySelector('.button_shuffle')
 const deck = document.querySelector('.deck')
+const tracker = document.querySelector('.tracker')
+
+const stageOneTracker = tracker.children[0].lastElementChild.children
+const stageTwoTracker = tracker.children[1].lastElementChild.children
+const stageThreeTracker = tracker.children[2].lastElementChild.children
+
+function setTrackerValues() {
+    stageOneTracker[0].textContent = '1'
+    stageOneTracker[1].textContent = '2'
+    stageOneTracker[2].textContent = '1'
+    stageTwoTracker[0].textContent = '2'
+    stageTwoTracker[1].textContent = '3'
+    stageTwoTracker[2].textContent = '1'
+    stageThreeTracker[0].textContent = '2'
+    stageThreeTracker[1].textContent = '4'
+    stageThreeTracker[2].textContent = '0'
+}
+
+window.addEventListener('load', setTrackerValues())
+
 
 let index = 0
 
 deck.addEventListener('click', () => {
+    changeTrackerValues()
+    changeCardsInDeck()
+})
+
+function decreaseTrackerValue(color, stage, i) {
+    if (result[index].color === color) {
+        stage[i].textContent = `${stage[i].textContent - 1}`
+    }
+}
+
+function changeTrackerValues() {
+    if (index < 4) {
+        decreaseTrackerValue('green', stageOneTracker, 0)
+        decreaseTrackerValue('brown', stageOneTracker, 1)
+        decreaseTrackerValue('blue', stageOneTracker, 2)
+    } else if (index < 10 && index >= 4) {
+        decreaseTrackerValue('green', stageTwoTracker, 0)
+        decreaseTrackerValue('brown', stageTwoTracker, 1)
+        decreaseTrackerValue('blue', stageTwoTracker, 2)
+    } else {
+        decreaseTrackerValue('green', stageThreeTracker, 0)
+        decreaseTrackerValue('brown', stageThreeTracker, 1)
+        decreaseTrackerValue('blue', stageThreeTracker, 2)
+    }
+}
+
+function changeCardsInDeck() {
     let step = 1
     if (result.length !== 0) {
         deck.style.backgroundImage = `url(${result[index].cardFace})`
@@ -16,8 +63,7 @@ deck.addEventListener('click', () => {
             : step = 0
         index += step
     }
-    
-})
+}
 
 let blueCards = []
 let brownCards = []
