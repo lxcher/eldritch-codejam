@@ -135,6 +135,16 @@ let greenCards = []
 
 
 shuffleCardsBtn.addEventListener('click', () => {
+    index = 0
+    blueCards = []
+    brownCards = []
+    greenCards = []
+    stageOne = []
+    stageTwo = []
+    stageThree = []
+    result = []
+    deck.style.backgroundImage = `url('./assets/mythicCardBackground.png')`
+    setTrackerValues()
     shuffleCards()
     setStages()
     shuffleStages()
@@ -160,7 +170,6 @@ function setCards(quantity, deck, source) {
 let stageOne = []
 let stageTwo = []
 let stageThree = []
-
 
 function setStages() {
     setStage(stageOne, ancientObj.firstStage.greenCards, greenCards)
@@ -202,3 +211,35 @@ function shuffleStages() {
     console.log(result)
 }
 
+// let difficultyValue = 'very-easy'
+
+// const difficulty = document.querySelector('.difficulties')
+
+// difficulty.addEventListener('click', setDifficulty)
+
+// function setDifficulty(e) {
+//     difficultyValue = e.target.getAttribute('id')
+//     console.log()
+// }
+
+// let sortedBlueCards = []
+
+// function sortCards() {
+//     let array = []
+//     blueCardsData.forEach( el => {
+//         if (difficultyValue === 'very-easy') {
+//             if (el.difficulty === 'easy') {
+//                 console.log(el)
+//                 array.push(el)
+//             }
+//         }
+//     })
+//     if (array.length < blueCardsQty) {
+//         blueCardsData.forEach( el => {
+
+//         })
+//     }
+//     console.log(array)
+// }
+
+// sortCards()
