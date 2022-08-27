@@ -8,13 +8,70 @@ const deck = document.querySelector('.deck')
 const tracker = document.querySelector('.tracker')
 const ancients = document.querySelector('.ancients')
 
-ancients.addEventListener('click', chooseAncient)
+const stageOneTracker = tracker.children[0].lastElementChild.children
+const stageTwoTracker = tracker.children[1].lastElementChild.children
+const stageThreeTracker = tracker.children[2].lastElementChild.children
+
+const difficulty = document.querySelector('.difficulties')
+
+
+
+let firstStageSum = 0
+let secondStageSum = 0
+let thirdStageSum = 0
 
 let greenCardsQty = 0
 let brownCardsQty = 0
 let blueCardsQty = 0
 
 let ancientObj = {}
+
+let sortedGreenCards = []
+let sortedBrownCards = []
+let sortedBlueCards = []
+
+let stageOne = []
+let stageTwo = []
+let stageThree = []
+
+let result = []
+
+let index = 0
+
+let difficultyValue = ''
+
+ancients.addEventListener('click', chooseAncient)
+
+shuffleCardsBtn.addEventListener('click', () => {
+    index = 0
+    deck.style.backgroundImage = `url('./assets/mythicCardBackground.png')`
+    showShuffleError()
+    setTrackerValues()
+    console.log(difficultyValue)
+    if (difficultyValue === 'very-easy' || difficultyValue === 'very-hard') {
+        sortCards()
+        setStages()
+        shuffleStages()
+    } else {
+        alert('error difficulty')
+    }
+})
+
+deck.addEventListener('click', () => {
+    console.log(difficultyValue)
+    if (difficultyValue === 'very-easy' || difficultyValue === 'very-hard') {
+        showDecktError()
+        changeTrackerValues()
+        changeCardsInDeck()
+    } else {
+        alert('error difficulty')
+    }
+    
+})
+
+difficulty.addEventListener('click', (e) => {
+    setDifficulty(e)
+})
 
 function getSumOfCards() {
     greenCardsQty = +ancientObj.firstStage.greenCards + +ancientObj.secondStage.greenCards + +ancientObj.thirdStage.greenCards
@@ -31,9 +88,9 @@ function clearEverything() {
     firstStageSum = 0
     secondStageSum = 0
     thirdStageSum = 0
-    blueCards = []
-    brownCards = []
-    greenCards = []
+    sortedGreenCards = []
+    sortedBrownCards = []
+    sortedBlueCards = []
     stageOne = []
     stageTwo = []
     stageThree = []
@@ -59,11 +116,25 @@ function chooseAncient(e) {
     getSumOfCards()
     setTrackerValues()
     setStagesSums()
+    
+    
 }
 
-const stageOneTracker = tracker.children[0].lastElementChild.children
-const stageTwoTracker = tracker.children[1].lastElementChild.children
-const stageThreeTracker = tracker.children[2].lastElementChild.children
+function sortCards() {
+    sortedGreenCards = []
+    sortedBrownCards = []
+    sortedBlueCards = []
+
+    if (difficultyValue === 'very-easy' || difficultyValue === 'very-hard') {
+        sortCardsVeryEasy(greenCardsData, greenCardsQty, sortedGreenCards)
+        sortCardsVeryEasy(brownCardsData, brownCardsQty, sortedBrownCards)
+        sortCardsVeryEasy(blueCardsData, blueCardsQty, sortedBlueCards)
+    } else {
+        alert('error difficulty')
+    }
+}
+
+
 
 function setTrackerValues() {
     stageOneTracker[0].textContent = ancientObj.firstStage.greenCards
@@ -77,19 +148,16 @@ function setTrackerValues() {
     stageThreeTracker[2].textContent = ancientObj.thirdStage.blueCards
 }
 
-let index = 0
 
-deck.addEventListener('click', () => {
-    showDecktError()
-    changeTrackerValues()
-    changeCardsInDeck()
-})
 
 function showDecktError() {
-    if (Object.keys(ancientObj).length === 0 && result.length === 0) {
-        alert('Выберите Древнего и перемешайте колоду!')
+    if (Object.keys(ancientObj).length === 0) {
+        alert('Выберите Древнего!')
     }
-    if (Object.keys(ancientObj).length !== 0 && result.length === 0) {
+    if (Object.keys(ancientObj).length !== 0 && difficultyValue === '') {
+        alert('Выберите сложность!')
+    }
+    if (Object.keys(ancientObj).length !== 0 && difficultyValue !== '' && result.length === 0) {
         alert('Перемешайте колоду!')
     }
 }
@@ -98,6 +166,10 @@ function showShuffleError() {
     if (Object.keys(ancientObj).length === 0) {
         alert('Выберите Древнего!')
     }
+    if (Object.keys(ancientObj).length !== 0 && difficultyValue === '') {
+        alert('Выберите сложность!')
+    }
+
 }
 
 function decreaseTrackerValue(color, stage, i) {
@@ -106,9 +178,7 @@ function decreaseTrackerValue(color, stage, i) {
     }
 }
 
-let firstStageSum = 0
-let secondStageSum = 0
-let thirdStageSum = 0
+
 
 function setStagesSums() {
     firstStageSum = +ancientObj.firstStage.greenCards + +ancientObj.firstStage.brownCards + +ancientObj.firstStage.blueCards
@@ -117,6 +187,7 @@ function setStagesSums() {
 }
 
 function changeTrackerValues() {
+    
     if (index < firstStageSum) {
         decreaseTrackerValue('green', stageOneTracker, 0)
         decreaseTrackerValue('brown', stageOneTracker, 1)
@@ -145,61 +216,20 @@ function changeCardsInDeck() {
     }
 }
 
-let blueCards = []
-let brownCards = []
-let greenCards = []
-
-
-shuffleCardsBtn.addEventListener('click', () => {
-    
-    index = 0
-    blueCards = []
-    brownCards = []
-    greenCards = []
+function setStages() {
     stageOne = []
     stageTwo = []
     stageThree = []
-    result = []
-    deck.style.backgroundImage = `url('./assets/mythicCardBackground.png')`
-    showShuffleError()
-    setTrackerValues()
-    shuffleCards()
-    setStages()
-    shuffleStages()
-    
-})
 
-function shuffleCards() {
-    setCards(blueCardsQty, blueCards, blueCardsData)
-    setCards(brownCardsQty, brownCards, brownCardsData)
-    setCards(greenCardsQty, greenCards, greenCardsData)
-}
-
-function setCards(quantity, deck, source) {
-    let set = new Set
-    while (set.size < quantity) {
-        let index = Math.floor(Math.random() * source.length)
-        set.add(source[index])
-    }
-    for (let item of set) {
-        deck.push(item)
-    }
-}
-
-let stageOne = []
-let stageTwo = []
-let stageThree = []
-
-function setStages() {
-    setStage(stageOne, ancientObj.firstStage.greenCards, greenCards)
-    setStage(stageOne, ancientObj.firstStage.brownCards, brownCards)
-    setStage(stageOne, ancientObj.firstStage.blueCards, blueCards)
-    setStage(stageTwo, ancientObj.secondStage.greenCards, greenCards)
-    setStage(stageTwo, ancientObj.secondStage.brownCards, brownCards)
-    setStage(stageTwo, ancientObj.secondStage.blueCards, blueCards)
-    setStage(stageThree, ancientObj.thirdStage.greenCards, greenCards)
-    setStage(stageThree, ancientObj.thirdStage.brownCards, brownCards)
-    setStage(stageThree, ancientObj.thirdStage.blueCards, blueCards)
+    setStage(stageOne, ancientObj.firstStage.greenCards, sortedGreenCards)
+    setStage(stageOne, ancientObj.firstStage.brownCards, sortedBrownCards)
+    setStage(stageOne, ancientObj.firstStage.blueCards, sortedBlueCards)
+    setStage(stageTwo, ancientObj.secondStage.greenCards, sortedGreenCards)
+    setStage(stageTwo, ancientObj.secondStage.brownCards, sortedBrownCards)
+    setStage(stageTwo, ancientObj.secondStage.blueCards, sortedBlueCards)
+    setStage(stageThree, ancientObj.thirdStage.greenCards, sortedGreenCards)
+    setStage(stageThree, ancientObj.thirdStage.brownCards, sortedBrownCards)
+    setStage(stageThree, ancientObj.thirdStage.blueCards, sortedBlueCards)
 }
 
 function setStage(stage, quantity, source) {
@@ -208,8 +238,6 @@ function setStage(stage, quantity, source) {
         stage.push(item)
     }
 }
-
-let result = []
 
 function shuffleStage(stage) {
     let set = new Set
@@ -227,38 +255,57 @@ function shuffleStages() {
     shuffleStage(stageOne)
     shuffleStage(stageTwo)
     shuffleStage(stageThree)
-    console.log(result)
 }
-
-let difficultyValue = 'very-easy'
-
-const difficulty = document.querySelector('.difficulties')
-
-difficulty.addEventListener('click', setDifficulty)
 
 function setDifficulty(e) {
     difficultyValue = e.target.getAttribute('id')
-    console.log()
 }
 
-let sortedBlueCards = []
-
-function sortCards() {
+function sortCardsVeryEasy(source, qty, result) {
     let array = []
-    blueCardsData.forEach( el => {
+    let set = new Set
+    source.forEach(el => {
         if (difficultyValue === 'very-easy') {
             if (el.difficulty === 'easy') {
-                console.log(el)
                 array.push(el)
             }
         }
-    })
-    if (array.length < blueCardsQty) {
-        blueCardsData.forEach( el => {
-
+        if (difficultyValue === 'very-hard') {
+            if (el.difficulty === 'hard') {
+                array.push(el)
+            }
+        }
+    });
+    if(array.length < qty) {
+        let additionalSet = new Set
+        let additionalArray = []
+        source.forEach(el => {
+            if (el.difficulty === 'normal') {
+                additionalArray.push(el)
+            }
         })
+        while (additionalSet.size < qty - array.length) {
+            let index = Math.floor(Math.random() * additionalArray.length)
+            additionalSet.add(additionalArray[index])
+        }
+        for (let item of additionalSet) {
+            array.push(item)
+        }
     }
-    console.log(array)
+    if (array.length > qty) {
+        for (let i = 0; i <= array.length - qty; i++) {
+            let index = Math.floor(Math.random() * array.length)
+            array.splice(index, 1)
+        }
+    }
+    while (set.size !== array.length) {
+        let index = Math.floor(Math.random() * array.length)
+        set.add(array[index])
+    }
+    for (let item of set) {
+        result.push(item)
+    }
+    
 }
 
-sortCards()
+
