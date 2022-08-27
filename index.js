@@ -48,27 +48,16 @@ shuffleCardsBtn.addEventListener('click', () => {
     showShuffleError()
     setTrackerValues()
     console.log(difficultyValue)
-    if (difficultyValue !== 'normal') {
-        sortCards()
-        setStages()
-        shuffleStages()
-    }
-    if (difficultyValue === 'normal') {
-        alert('error difficulty')
-    }
+    sortCards()
+    setStages()
+    shuffleStages()
 })
 
 deck.addEventListener('click', () => {
     console.log(difficultyValue)
-    if (difficultyValue !== 'normal') {
-        showDecktError()
-        changeTrackerValues()
-        changeCardsInDeck()
-    }
-    if (difficultyValue === 'normal') {
-        alert('error difficulty')
-    }
-    
+    showDecktError()
+    changeTrackerValues()
+    changeCardsInDeck()
 })
 
 difficulty.addEventListener('click', (e) => {
@@ -118,8 +107,6 @@ function chooseAncient(e) {
     getSumOfCards()
     setTrackerValues()
     setStagesSums()
-    
-    
 }
 
 function sortCards() {
@@ -137,7 +124,9 @@ function sortCards() {
         sortCardsVeryEasyHard(blueCardsData, blueCardsQty, sortedBlueCards)
     }
     if (difficultyValue === 'normal')  {
-        alert('error difficulty')
+        sortCardsNormal(greenCardsData, greenCardsQty, sortedGreenCards)
+        sortCardsNormal(brownCardsData, brownCardsQty, sortedBrownCards)
+        sortCardsNormal(blueCardsData, blueCardsQty, sortedBlueCards)
     }
 }
 
@@ -343,4 +332,18 @@ function getRandomNumber(number) {
     return Math.floor(Math.random() * number)
 }
 
+function sortCardsNormal(source, qty, result) {
+    let array = []
+    let set = new Set
+    source.forEach(el => {
+        array.push(el)
+    })
+    while (set.size !== qty) {
+        let index = getRandomNumber(array.length)
+        set.add(array[index])
+    }
+    for (let item of set) {
+        result.push(item)
+    }
+}
 
