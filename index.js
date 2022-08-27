@@ -238,7 +238,8 @@ function setStage(stage, quantity, source) {
 function shuffleStage(stage) {
     let set = new Set
     while (set.size !== stage.length) {
-        let index = Math.floor(Math.random() * stage.length)
+        let index = getRandomNumber(stage.length)
+
         set.add(stage[index])
     }
     for (let item of set) {
@@ -281,7 +282,7 @@ function sortCardsVeryEasyHard(source, qty, result) {
             }
         })
         while (additionalSet.size < qty - array.length) {
-            let index = Math.floor(Math.random() * additionalArray.length)
+            let index = getRandomNumber(additionalArray.length)
             additionalSet.add(additionalArray[index])
         }
         for (let item of additionalSet) {
@@ -290,12 +291,12 @@ function sortCardsVeryEasyHard(source, qty, result) {
     }
     if (array.length > qty) {
         for (let i = 0; i <= array.length - qty; i++) {
-            let index = Math.floor(Math.random() * array.length)
+            let index = getRandomNumber(array.length)
             array.splice(index, 1)
         }
     }
     while (set.size !== array.length) {
-        let index = Math.floor(Math.random() * array.length)
+        let index = getRandomNumber(array.length)
         set.add(array[index])
     }
     for (let item of set) {
@@ -328,10 +329,6 @@ function sortCardsEasyHard (source, qty, result) {
     }
 }
 
-function getRandomNumber(number) {
-    return Math.floor(Math.random() * number)
-}
-
 function sortCardsNormal(source, qty, result) {
     let array = []
     let set = new Set
@@ -347,3 +344,6 @@ function sortCardsNormal(source, qty, result) {
     }
 }
 
+function getRandomNumber(number) {
+    return Math.floor(Math.random() * number)
+}
