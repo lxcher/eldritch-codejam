@@ -48,22 +48,24 @@ shuffleCardsBtn.addEventListener('click', () => {
     showShuffleError()
     setTrackerValues()
     console.log(difficultyValue)
-    if (difficultyValue === 'very-easy' || difficultyValue === 'very-hard') {
+    if (difficultyValue !== 'normal') {
         sortCards()
         setStages()
         shuffleStages()
-    } else {
+    }
+    if (difficultyValue === 'normal') {
         alert('error difficulty')
     }
 })
 
 deck.addEventListener('click', () => {
     console.log(difficultyValue)
-    if (difficultyValue === 'very-easy' || difficultyValue === 'very-hard') {
+    if (difficultyValue !== 'normal') {
         showDecktError()
         changeTrackerValues()
         changeCardsInDeck()
-    } else {
+    }
+    if (difficultyValue === 'normal') {
         alert('error difficulty')
     }
     
@@ -124,12 +126,17 @@ function sortCards() {
     sortedGreenCards = []
     sortedBrownCards = []
     sortedBlueCards = []
-
+    if (difficultyValue === 'easy' || difficultyValue === 'hard') {
+        sortCardsEasyHard(greenCardsData, greenCardsQty, sortedGreenCards)
+        sortCardsEasyHard(brownCardsData, brownCardsQty, sortedBrownCards)
+        sortCardsEasyHard(blueCardsData, blueCardsQty, sortedBlueCards)
+    }
     if (difficultyValue === 'very-easy' || difficultyValue === 'very-hard') {
-        sortCardsVeryEasy(greenCardsData, greenCardsQty, sortedGreenCards)
-        sortCardsVeryEasy(brownCardsData, brownCardsQty, sortedBrownCards)
-        sortCardsVeryEasy(blueCardsData, blueCardsQty, sortedBlueCards)
-    } else {
+        sortCardsVeryEasyHard(greenCardsData, greenCardsQty, sortedGreenCards)
+        sortCardsVeryEasyHard(brownCardsData, brownCardsQty, sortedBrownCards)
+        sortCardsVeryEasyHard(blueCardsData, blueCardsQty, sortedBlueCards)
+    }
+    if (difficultyValue === 'normal')  {
         alert('error difficulty')
     }
 }
@@ -261,7 +268,7 @@ function setDifficulty(e) {
     difficultyValue = e.target.getAttribute('id')
 }
 
-function sortCardsVeryEasy(source, qty, result) {
+function sortCardsVeryEasyHard(source, qty, result) {
     let array = []
     let set = new Set
     source.forEach(el => {
@@ -306,6 +313,34 @@ function sortCardsVeryEasy(source, qty, result) {
         result.push(item)
     }
     
+}
+
+function sortCardsEasyHard (source, qty, result) {
+    let array = []
+    let set = new Set
+    source.forEach(el => {
+        if (difficultyValue === 'easy') {
+            if (el.difficulty !== 'hard') {
+                array.push(el)
+            }
+        }
+        if (difficultyValue === 'hard') {
+            if (el.difficulty !== 'easy') {
+                array.push(el)
+            }
+        }
+    })
+    while (set.size !== qty) {
+        let index = getRandomNumber(array.length)
+        set.add(array[index])
+    }
+    for (let item of set) {
+        result.push(item)
+    }
+}
+
+function getRandomNumber(number) {
+    return Math.floor(Math.random() * number)
 }
 
 
