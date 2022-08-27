@@ -80,9 +80,25 @@ function setTrackerValues() {
 let index = 0
 
 deck.addEventListener('click', () => {
+    showDecktError()
     changeTrackerValues()
     changeCardsInDeck()
 })
+
+function showDecktError() {
+    if (Object.keys(ancientObj).length === 0 && result.length === 0) {
+        alert('Выберите Древнего и перемешайте колоду!')
+    }
+    if (Object.keys(ancientObj).length !== 0 && result.length === 0) {
+        alert('Перемешайте колоду!')
+    }
+}
+
+function showShuffleError() {
+    if (Object.keys(ancientObj).length === 0) {
+        alert('Выберите Древнего!')
+    }
+}
 
 function decreaseTrackerValue(color, stage, i) {
     if (result[index].color === color) {
@@ -135,6 +151,7 @@ let greenCards = []
 
 
 shuffleCardsBtn.addEventListener('click', () => {
+    
     index = 0
     blueCards = []
     brownCards = []
@@ -144,10 +161,12 @@ shuffleCardsBtn.addEventListener('click', () => {
     stageThree = []
     result = []
     deck.style.backgroundImage = `url('./assets/mythicCardBackground.png')`
+    showShuffleError()
     setTrackerValues()
     shuffleCards()
     setStages()
     shuffleStages()
+    
 })
 
 function shuffleCards() {
@@ -211,35 +230,35 @@ function shuffleStages() {
     console.log(result)
 }
 
-// let difficultyValue = 'very-easy'
+let difficultyValue = 'very-easy'
 
-// const difficulty = document.querySelector('.difficulties')
+const difficulty = document.querySelector('.difficulties')
 
-// difficulty.addEventListener('click', setDifficulty)
+difficulty.addEventListener('click', setDifficulty)
 
-// function setDifficulty(e) {
-//     difficultyValue = e.target.getAttribute('id')
-//     console.log()
-// }
+function setDifficulty(e) {
+    difficultyValue = e.target.getAttribute('id')
+    console.log()
+}
 
-// let sortedBlueCards = []
+let sortedBlueCards = []
 
-// function sortCards() {
-//     let array = []
-//     blueCardsData.forEach( el => {
-//         if (difficultyValue === 'very-easy') {
-//             if (el.difficulty === 'easy') {
-//                 console.log(el)
-//                 array.push(el)
-//             }
-//         }
-//     })
-//     if (array.length < blueCardsQty) {
-//         blueCardsData.forEach( el => {
+function sortCards() {
+    let array = []
+    blueCardsData.forEach( el => {
+        if (difficultyValue === 'very-easy') {
+            if (el.difficulty === 'easy') {
+                console.log(el)
+                array.push(el)
+            }
+        }
+    })
+    if (array.length < blueCardsQty) {
+        blueCardsData.forEach( el => {
 
-//         })
-//     }
-//     console.log(array)
-// }
+        })
+    }
+    console.log(array)
+}
 
-// sortCards()
+sortCards()
