@@ -14,8 +14,6 @@ const stageThreeTracker = tracker.children[2].lastElementChild.children
 
 const difficulty = document.querySelector('.difficulties')
 
-
-
 let firstStageSum = 0
 let secondStageSum = 0
 let thirdStageSum = 0
@@ -40,27 +38,36 @@ let index = 0
 
 let difficultyValue = ''
 
-ancients.addEventListener('click', chooseAncient)
+ancients.addEventListener('click', (e) => {
+    removeAncientsActiveClass()
+    chooseAncient(e)
+})
+
+
 
 shuffleCardsBtn.addEventListener('click', () => {
     index = 0
     deck.style.backgroundImage = `url('./assets/mythicCardBackground.png')`
     showShuffleError()
     setTrackerValues()
-    console.log(difficultyValue)
     sortCards()
     setStages()
     shuffleStages()
 })
 
 deck.addEventListener('click', () => {
-    console.log(difficultyValue)
     showDecktError()
     changeTrackerValues()
     changeCardsInDeck()
 })
 
 difficulty.addEventListener('click', (e) => {
+    for (let i = 0; i < difficulty.children.length; i++) {
+        difficulty.children[i].classList.remove('active')
+    }
+    if (e.target !== difficulty) {
+        e.target.classList.add('active')
+    }
     setDifficulty(e)
 })
 
@@ -89,9 +96,16 @@ function clearEverything() {
     deck.style.backgroundImage = `url('./assets/mythicCardBackground.png')`
 }
 
+function removeAncientsActiveClass() {
+    for (let i = 0; i < ancients.children.length; i++) {
+        ancients.children[i].classList.remove('active')
+    }
+}
+
 function chooseAncient(e) {
     clearEverything()
     let ancient = e.target
+    ancient.classList.add('active')
     if (ancient.classList.contains('ancients__ancient_azathoth')) {
         ancientObj = ancientsData[0]
     }
